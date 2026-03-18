@@ -1,1 +1,432 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WaterMelon · e‑commerce de calçados</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #fcf9f7;
+            color: #3a3a3a;
+            line-height: 1.4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            padding: 0.5rem 0.75rem 0.75rem 0.75rem;
+            margin: 0 auto;
+        }
+        .header-grid {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0.35rem 0 0.5rem 0;
+            border-bottom: 2px solid #EC0772;
+        }
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #EC0772;
+            letter-spacing: -0.02em;
+            white-space: nowrap;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .logo-text:hover {
+            filter: brightness(0.9);
+        }
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+        .btn {
+            font-weight: 600;
+            padding: 0.4rem 0.8rem;
+            border: 2px solid transparent;
+            background: #EC0772;
+            color: #fff;
+            cursor: pointer;
+            text-align: center;
+            font-size: 0.8rem;
+            transition: 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 0;
+            white-space: nowrap;
+        }
+        .btn-outline {
+            background: transparent;
+            border-color: #EC0772;
+            color: #EC0772;
+        }
+        .btn:hover { filter: brightness(0.9); }
 
+        .produtos-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin: 0 0 0.5rem 0;
+        }
+        .card {
+            border: 2px solid #5A5758;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .card img {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            border-bottom: 2px solid #5A5758;
+        }
+        .card-body {
+            padding: 0.35rem;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            gap: 0.1rem;
+        }
+        .card-body h3 {
+            font-size: 1rem;
+            color: #EC0772;
+            font-weight: 600;
+            line-height: 1.2;
+            word-break: break-word;
+        }
+        .card-body .preco {
+            font-weight: 700;
+            color: #ED1C24;
+            font-size: 1rem;
+            margin-top: auto;
+        }
+        .card-body .btn {
+            width: 100%;
+            padding: 0.25rem;
+            font-size: 0.85rem;
+            margin-top: 0.05rem;
+        }
+
+        .categorias-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin: 0.25rem 0 0.5rem 0;
+        }
+        .categoria-btn {
+            background: #5A5758;
+            border: 2px solid #EC0772;
+            color: #fff;
+            font-weight: 600;
+            padding: 1rem 0.5rem;
+            text-align: center;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            width: 100%;
+        }
+        .categoria-btn:hover {
+            background: #EC0772;
+            border-color: #5A5758;
+        }
+
+        .divider {
+            border: none;
+            border-top: 2px solid #EC0772;
+            margin: 1rem 0 0.75rem 0;
+        }
+
+        .footer {
+            border-top: 2px solid #EC0772;
+            padding: 1rem 0;
+            margin-top: 1rem;
+            text-align: center;
+            color: #5A5758;
+            font-size: 0.85rem;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal {
+            background: #fff;
+            border: 3px solid #EC0772;
+            width: 90%;
+            max-width: 280px;
+            padding: 0.7rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal .close-modal {
+            align-self: flex-end;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #5A5758;
+            line-height: 1;
+            margin-top: -0.3rem;
+        }
+        .modal h2 {
+            color: #EC0772;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: -0.3rem;
+            word-break: break-word;
+        }
+        .modal input {
+            padding: 0.5rem;
+            border: 2px solid #5A5758;
+            font-family: 'Inter', sans-serif;
+            width: 100%;
+            font-size: 0.85rem;
+        }
+        .modal .btn {
+            width: 100%;
+            padding: 0.5rem;
+            font-size: 0.85rem;
+        }
+        hr { border: 1px solid #EC0772; margin: 0.3rem 0; }
+        .modal p { font-size: 0.75rem; }
+
+        /* Modal de produto com largura ligeiramente maior e altura reduzida */
+        #produtoModal {
+            max-width: 280px;                /* aumentado de 260px para 280px */
+            padding: 0.6rem;                  /* padding reduzido para diminuir altura */
+            gap: 0.4rem;                      /* gap menor entre elementos */
+        }
+        #produtoModal h2 {
+            font-size: 1.1rem;
+            margin-top: 0;
+        }
+        #produtoModal .preco {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #ED1C24;
+        }
+        #produtoModal .descricao {
+            font-size: 0.8rem;
+            color: #5A5758;
+            font-style: italic;
+            line-height: 1.2;
+            margin: 0;
+        }
+        #modalProdImg {
+            width: 100%;
+            height: 130px;                    /* reduzido de 150px para 130px */
+            object-fit: cover;
+            border: 2px solid #5A5758;
+            background: #f0f0f0;
+            padding: 0;
+        }
+
+        @media (min-width: 600px) {
+            .container { padding: 0.75rem 1rem 1rem 1rem; }
+            .logo-text { font-size: 1.8rem; }
+            .btn { padding: 0.5rem 1rem; font-size: 0.9rem; }
+            .produtos-grid {
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+                gap: 1rem;
+            }
+            .categorias-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 1rem;
+            }
+        }
+        @media (min-width: 960px) {
+            .container { max-width: 1200px; }
+            .produtos-grid { gap: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header class="header-grid">
+        <a href="javascript:void(0)" onclick="window.location.reload()" class="logo-text">WaterMelon</a>
+        <div class="btn-group">
+            <button class="btn btn-outline" onclick="alert('Catálogo (demo)')">Catálogo</button>
+            <button class="btn btn-outline" onclick="alert('Carrinho vazio (demo)')">Carrinho (0)</button>
+            <button class="btn" onclick="abrirModal('loginModal')">Entrar</button>
+        </div>
+    </header>
+
+    <!-- Em Destaques -->
+    <h2 style="color:#EC0772; margin:0.15rem 0 0.1rem 0; font-size:1.2rem;">Em Destaques:</h2>
+    <div class="produtos-grid" id="produtosGrid">
+        <div class="card">
+            <img src="https://monjua.fbitsstatic.net/img/p/tenis-masculino-ollie-casual-branco-e-preto-152115/344825-1.jpg?w=420&h=420&v=202501231556&w=123&h=169" alt="Tênis urbano">
+            <div class="card-body">
+                <h3>Tênis Urban</h3>
+                <div class="preco">R$ 199,90</div>
+                <button class="btn" onclick="abrirProduto('Tênis Urban', 'R$ 199,90', 'https://monjua.fbitsstatic.net/img/p/tenis-masculino-ollie-casual-branco-e-preto-152115/344825-1.jpg?w=420&h=420&v=202501231556&w=123&h=169', 'Conforto e estilo para o dia a dia. Cabedal em couro sintético e sola flexível.')">Ver Detalhes</button>
+            </div>
+        </div>
+        <div class="card">
+            <img src="https://monjua.fbitsstatic.net/img/p/tenis-masculino-ollie-casual-branco-e-preto-152115/344825-1.jpg?w=420&h=420&v=202501231556&w=123&h=169" alt="Sapato social">
+            <div class="card-body">
+                <h3>Sapato Office</h3>
+                <div class="preco">R$ 289,90</div>
+                <button class="btn" onclick="abrirProduto('Sapato Office', 'R$ 289,90', 'https://monjua.fbitsstatic.net/img/p/tenis-masculino-ollie-casual-branco-e-preto-152115/344825-1.jpg?w=420&h=420&v=202501231556&w=123&h=169', 'Elegância para o trabalho. Design clássico, couro legítimo e palmilha acolchoada.')">Ver Detalhes</button>
+            </div>
+        </div>
+        <div class="card">
+            <img src="https://monjua.fbitsstatic.net/img/p/tenis-masculino-ollie-casual-branco-e-preto-152115/344825-1.jpg?w=420&h=420&v=202501231556&w=123&h=169" alt="Chuteira">
+            <div class="card-body">
+                <h3>Chuteira Campo</h3>
+                <div class="preco">R$ 349,90</div>
+                <button class="btn" onclick="abrirProduto('Chuteira Campo', 'R$ 349,90', 'https://monjua.fbitsstatic.net/img/p/tenis-masculino-ollie-casual-branco-e-preto-152115/344825-1.jpg?w=420&h=420&v=202501231556&w=123&h=169', 'Alta performance nos gramados. Travas moldadas e material resistente à água.')">Ver Detalhes</button>
+            </div>
+        </div>
+        <div class="card">
+            <img src="https://monjua.fbitsstatic.net/img/p/tenis-masculino-ollie-casual-branco-e-preto-152115/344825-1.jpg?w=420&h=420&v=202501231556&w=123&h=169" alt="Rasteira">
+            <div class="card-body">
+                <h3>Rasteira Verão</h3>
+                <div class="preco">R$ 89,90</div>
+                <button class="btn" onclick="abrirProduto('Rasteira Verão', 'R$ 89,90', 'https://monjua.fbitsstatic.net/img/p/tenis-masculino-ollie-casual-branco-e-preto-152115/344825-1.jpg?w=420&h=420&v=202501231556&w=123&h=169', 'Leveza e frescor para os dias quentes. Tiras ajustáveis e sola antiderrapante.')">Ver Detalhes</button>
+            </div>
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Categorias -->
+    <div class="categorias-grid">
+        <button class="categoria-btn" onclick="alert('Categoria Masculino (demo)')">Masculino</button>
+        <button class="categoria-btn" onclick="alert('Categoria Feminino (demo)')">Feminino</button>
+        <button class="categoria-btn" onclick="alert('Categoria Infantil (demo)')">Infantil</button>
+        <button class="categoria-btn" onclick="alert('Categoria Esportivo (demo)')">Esportivo</button>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Mais Vendidos -->
+    <h2 style="color:#EC0772; margin:0 0 0.1rem 0; font-size:1.2rem;">Mais Vendidos:</h2>
+    <div class="produtos-grid" id="maisVendidosGrid">
+        <div class="card">
+            <img src="https://monjua.fbitsstatic.net/img/p/tenis-masculino-ollie-casual-branco-e-preto-152115/344825-1.jpg?w=420&h=420&v=202501231556&w=123&h=169" alt="Tênis esportivo">
+            <div class="card-body">
+                <h3>Tênis Runner</h3>
+                <div class="preco">R$ 249,90</div>
+                <button class="btn" onclick="abrirProduto('Tênis Runner', 'R$ 249,90', 'https://monjua.fbitsstatic.net/img/p/tenis-masculino-ollie-casual-branco-e-preto-152115/344825-1.jpg?w=420&h=420&v=202501231556&w=123&h=169', 'Ideal para corridas diárias. Amortecimento reforçado e tecido respirável.')">Ver Detalhes</button>
+            </div>
+        </div>
+        <div class="card">
+            <img src="https://monjua.fbitsstatic.net/img/p/tenis-masculino-ollie-casual-branco-e-preto-152115/344825-1.jpg?w=420&h=420&v=202501231556&w=123&h=169" alt="Bota casual">
+            <div class="card-body">
+                <h3>Bota Couro</h3>
+                <div class="preco">R$ 399,90</div>
+                <button class="btn" onclick="abrirProduto('Bota Couro', 'R$ 399,90', 'https://monjua.fbitsstatic.net/img/p/tenis-masculino-ollie-casual-branco-e-preto-152115/344825-1.jpg?w=420&h=420&v=202501231556&w=123&h=169', 'Durabilidade e sofisticação. Couro legítimo, forro interno macio e solado robusto.')">Ver Detalhes</button>
+            </div>
+        </div>
+        <div class="card">
+            <img src="https://monjua.fbitsstatic.net/img/p/tenis-masculino-ollie-casual-branco-e-preto-152115/344825-1.jpg?w=420&h=420&v=202501231556&w=123&h=169" alt="Sandália">
+            <div class="card-body">
+                <h3>Sandália Praia</h3>
+                <div class="preco">R$ 79,90</div>
+                <button class="btn" onclick="abrirProduto('Sandália Praia', 'R$ 79,90', 'https://monjua.fbitsstatic.net/img/p/tenis-masculino-ollie-casual-branco-e-preto-152115/344825-1.jpg?w=420&h=420&v=202501231556&w=123&h=169', 'Perfeita para o verão. Material rápido de secar e conforto extra.')">Ver Detalhes</button>
+            </div>
+        </div>
+        <div class="card">
+            <img src="https://monjua.fbitsstatic.net/img/p/tenis-masculino-ollie-casual-branco-e-preto-152115/344825-1.jpg?w=420&h=420&v=202501231556&w=123&h=169" alt="Mocassim">
+            <div class="card-body">
+                <h3>Mocassim Luxo</h3>
+                <div class="preco">R$ 329,90</div>
+                <button class="btn" onclick="abrirProduto('Mocassim Luxo', 'R$ 329,90', 'https://monjua.fbitsstatic.net/img/p/tenis-masculino-ollie-casual-branco-e-preto-152115/344825-1.jpg?w=420&h=420&v=202501231556&w=123&h=169', 'Clássico e requintado. Couro nobre, detalhes artesanais e sola de borracha.')">Ver Detalhes</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        © 2026 WaterMelon · Todos os direitos reservados.<br>
+        Vendas sujeitas a disponibilidade de estoque.
+    </footer>
+</div>
+
+<div id="modalOverlay" class="modal-overlay" onclick="if(event.target===this)fecharModais()">
+    <div id="loginModal" class="modal">
+        <span class="close-modal" onclick="fecharModais()">&times;</span>
+        <h2>Login</h2>
+        <input type="email" id="loginEmail" placeholder="Seu e-mail">
+        <input type="password" id="loginSenha" placeholder="Senha">
+        <button class="btn" onclick="fazerLogin()">Entrar</button>
+        <hr>
+        <p>Ainda não tem conta? <a href="#" onclick="abrirModal('registerModal'); return false;">Registre-se</a></p>
+    </div>
+    <div id="registerModal" class="modal">
+        <span class="close-modal" onclick="fecharModais()">&times;</span>
+        <h2>Criar conta</h2>
+        <input type="email" id="regEmail" placeholder="E-mail">
+        <input type="password" id="regSenha" placeholder="Senha">
+        <button class="btn" onclick="fazerRegistro()">Registrar</button>
+    </div>
+    <div id="produtoModal" class="modal">
+        <span class="close-modal" onclick="fecharModais()">&times;</span>
+        <img id="modalProdImg" src="" alt="">
+        <h2 id="modalProdNome">Produto</h2>
+        <div id="modalProdPreco" class="preco"></div>
+        <p id="modalProdDesc" class="descricao"></p>
+        <button class="btn" onclick="fecharModais(); alert('Adicionado ao carrinho (demo)')">Adicionar ao Carrinho</button>
+    </div>
+</div>
+
+<script>
+    function abrirModal(id) {
+        document.getElementById('modalOverlay').style.display = 'flex';
+        document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
+        document.getElementById(id).style.display = 'flex';
+    }
+    function fecharModais() {
+        document.getElementById('modalOverlay').style.display = 'none';
+    }
+    function abrirProduto(nome, preco, img, desc) {
+        document.getElementById('modalProdNome').innerText = nome;
+        document.getElementById('modalProdPreco').innerText = preco;
+        document.getElementById('modalProdImg').src = img;
+        document.getElementById('modalProdDesc').innerText = desc;
+        abrirModal('produtoModal');
+    }
+    function fazerRegistro() {
+        const email = document.getElementById('regEmail').value.trim();
+        const senha = document.getElementById('regSenha').value.trim();
+        if(!email || !senha) { alert('Preencha e-mail e senha'); return; }
+        let usuarios = JSON.parse(localStorage.getItem('watermelon_users') || '[]');
+        if(usuarios.find(u => u.email === email)) {
+            alert('E-mail já cadastrado');
+            return;
+        }
+        usuarios.push({ email, senha });
+        localStorage.setItem('watermelon_users', JSON.stringify(usuarios));
+        alert('Conta criada! Faça login.');
+        fecharModais();
+    }
+    function fazerLogin() {
+        const email = document.getElementById('loginEmail').value.trim();
+        const senha = document.getElementById('loginSenha').value.trim();
+        const usuarios = JSON.parse(localStorage.getItem('watermelon_users') || '[]');
+        const valido = usuarios.find(u => u.email === email && u.senha === senha);
+        if(valido) {
+            alert('Login efetuado (demo)');
+            fecharModais();
+        } else {
+            alert('E-mail ou senha inválidos');
+        }
+    }
+</script>
+</body>
+</html>
